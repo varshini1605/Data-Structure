@@ -1,0 +1,59 @@
+88. Merge Sorted Array
+
+1. Using Two-Pointer Technique (Manual Merge)
+This is the most common and efficient method when both arrays are sorted.
+vector<int> mergeSortedArrays(const vector<int>& A, const vector<int>& B) {
+    vector<int> result;
+    int i = 0, j = 0;
+
+    while (i < A.size() && j < B.size()) {
+        if (A[i] < B[j]) result.push_back(A[i++]);
+        else result.push_back(B[j++]);
+    }
+
+    while (i < A.size()) result.push_back(A[i++]);
+    while (j < B.size()) result.push_back(B[j++]);
+
+    return result;
+}
+
+===================================================================================================================================
+
+2. Using STL merge() Function
+The C++ Standard Library provides a std::merge() function in the <algorithm> header.
+
+#include <algorithm>
+#include <vector>
+
+vector<int> mergeSortedArrays(const vector<int>& A, const vector<int>& B) {
+    vector<int> result(A.size() + B.size());
+    std::merge(A.begin(), A.end(), B.begin(), B.end(), result.begin());
+    return result;
+}
+
+==================================================================================================================================
+
+3. In-Place Merge (When One Array Has Extra Space)
+If you're merging into one of the arrays that has enough space to hold both, you can do it in-place from the end.
+
+void mergeInPlace(vector<int>& A, int m, vector<int>& B, int n) {
+    int i = m - 1, j = n - 1, k = m + n - 1;
+
+    while (i >= 0 && j >= 0) {
+        if (A[i] > B[j]) A[k--] = A[i--];
+        else A[k--] = B[j--];
+    }
+
+    while (j >= 0) A[k--] = B[j--];
+}
+
+====================================================================================================================================
+4. Using std::vector::insert and std::sort
+This is less efficient but simple for small arrays.
+
+vector<int> mergeSortedArrays(vector<int> A, const vector<int>& B) {
+    A.insert(A.end(), B.begin(), B.end());
+    std::sort(A.begin(), A.end());
+    return A;
+}
+
